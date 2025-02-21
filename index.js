@@ -109,7 +109,7 @@ const processLogLine = async line => {
 };
 
 (async () => {
-	log(0, `v${version} (https://github.com/sefinek/UFW-AbuseIPDB-Reporter)`);
+	log(0, `v${version} (https://github.com/sefinek/UFW-To-NetCatDB)`);
 
 	loadReportedIPs();
 
@@ -139,7 +139,7 @@ const processLogLine = async line => {
 	if (AUTO_UPDATE_ENABLED && AUTO_UPDATE_SCHEDULE) await require('./services/updates.js')();
 	if (DISCORD_WEBHOOKS_ENABLED && DISCORD_WEBHOOKS_URL) await require('./services/summaries.js')();
 
-	await discordWebhooks(0, `[UFW-AbuseIPDB-Reporter](https://github.com/sefinek/UFW-AbuseIPDB-Reporter) has been successfully launched on the device \`${SERVER_ID}\`.`);
+	await discordWebhooks(0, `[UFW-To-NetCatDB](https://github.com/sefinek/UFW-To-NetCatDB) has been successfully launched on the device \`${SERVER_ID}\`.`);
 
 	log(0, `Ready! Now monitoring: ${UFW_LOG_FILE}`);
 	log(0, '=====================================================================');

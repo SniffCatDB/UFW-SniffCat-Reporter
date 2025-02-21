@@ -20,7 +20,7 @@ cat << "EOF"
 
                  >> Made by sefinek.net || Last update: 10.02.2025 <<
 
-This installer will configure UFW-AbuseIPDB-Reporter, a tool that analyzes UFW logs and
+This installer will configure UFW-To-NetCatDB, a tool that analyzes UFW logs and
 reports to AbuseIPDB the IP addresses that have violated firewall rules. Join my Discord
 server to stay updated on the latest changes and more: https://discord.gg/53DBjTuzgZ
 ============================================================================================
@@ -156,17 +156,17 @@ fi
 
 cd /opt || { echo "❌ Failed to change directory to '/opt'. Exiting..."; exit 1; }
 
-if [ ! -d "UFW-AbuseIPDB-Reporter" ]; then
-    echo "📥 Cloning the UFW-AbuseIPDB-Reporter repository..."
-    sudo git clone https://github.com/sefinek/UFW-AbuseIPDB-Reporter.git || { echo "❌ Failed to clone the repository. Exiting..."; exit 1; }
+if [ ! -d "UFW-To-NetCatDB" ]; then
+    echo "📥 Cloning the UFW-To-NetCatDB repository..."
+    sudo git clone https://github.com/sefinek/UFW-To-NetCatDB.git || { echo "❌ Failed to clone the repository. Exiting..."; exit 1; }
 else
-    echo "✨ The UFW-AbuseIPDB-Reporter repository already exists"
+    echo "✨ The UFW-To-NetCatDB repository already exists"
 fi
 
-sudo chown "$USER":"$USER" /opt/UFW-AbuseIPDB-Reporter -R
+sudo chown "$USER":"$USER" /opt/UFW-To-NetCatDB -R
 
 echo "📥 Pulling latest changes..."
-cd UFW-AbuseIPDB-Reporter || { echo "❌ Failed to change directory to 'UFW-AbuseIPDB-Reporter'. Exiting..."; exit 1; }
+cd UFW-To-NetCatDB || { echo "❌ Failed to change directory to 'UFW-To-NetCatDB'. Exiting..."; exit 1; }
 git pull || { echo "❌ Failed to pull the latest changes. Exiting..."; exit 1; }
 
 # Install npm dependencies
@@ -240,4 +240,4 @@ echo "⚙️ Config File   : $PWD/config.js"
 echo -e "\n====================================== Support ======================================"
 echo "📩 Email         : contact@sefinek.net"
 echo "🔵 Discord       : https://discord.gg/RVH8UXgmzs"
-echo "😺 GitHub Issues : https://github.com/sefinek/UFW-AbuseIPDB-Reporter/issues"
+echo "😺 GitHub Issues : https://github.com/sefinek/UFW-To-NetCatDB/issues"

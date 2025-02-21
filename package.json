@@ -1,18 +1,18 @@
 {
-  "name": "ufw-abuseipdb-reporter",
+  "name": "ufw-to-netcatdb",
   "version": "0.2.0",
   "description": "A tool (with a simple installer) that monitors UFW firewall logs in real time and reports IP addresses to the AbuseIPDB database.",
   "keywords": [
     "ufw",
     "abuseipdb"
   ],
-  "homepage": "https://github.com/sefinek/UFW-AbuseIPDB-Reporter#readme",
+  "homepage": "https://github.com/sefinek/UFW-To-NetCatDB#readme",
   "bugs": {
-    "url": "https://github.com/sefinek/UFW-AbuseIPDB-Reporter/issues"
+    "url": "https://github.com/sefinek/UFW-To-NetCatDB/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sefinek/UFW-AbuseIPDB-Reporter.git"
+    "url": "git+https://github.com/sefinek/UFW-To-NetCatDB.git"
   },
   "license": "GPL-3.0",
   "author": "Sefinek <contact@sefinek.net> (https://sefinek.net)",

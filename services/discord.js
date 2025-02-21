@@ -29,7 +29,7 @@ module.exports = async (id, description) => {
 				description,
 				color: logType.color,
 				footer: {
-					text: `Date: ${new Date().toLocaleString()} | sefinek/UFW-AbuseIPDB-Reporter`,
+					text: `Date: ${new Date().toLocaleString()} | sefinek/UFW-To-NetCatDB`,
 				},
 				timestamp: new Date().toISOString(),
 			}],
