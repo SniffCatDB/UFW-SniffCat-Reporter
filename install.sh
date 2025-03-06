@@ -20,7 +20,7 @@ cat << "EOF"
 
                  >> Made by sefinek.net || Last update: 10.02.2025 <<
 
-This installer will configure UFW-To-NetCatDB, a tool that analyzes UFW logs and
+This installer will configure UFW-NetCatDB-Reporter, a tool that analyzes UFW logs and
 reports to AbuseIPDB the IP addresses that have violated firewall rules. Join my Discord
 server to stay updated on the latest changes and more: https://discord.gg/53DBjTuzgZ
 ============================================================================================
@@ -156,17 +156,17 @@ fi
 
 cd /opt || { echo "❌ Failed to change directory to '/opt'. Exiting..."; exit 1; }
 
-if [ ! -d "UFW-To-NetCatDB" ]; then
-    echo "📥 Cloning the UFW-To-NetCatDB repository..."
-    sudo git clone https://github.com/sefinek/UFW-To-NetCatDB.git || { echo "❌ Failed to clone the repository. Exiting..."; exit 1; }
+if [ ! -d "UFW-NetCatDB-Reporter" ]; then
+    echo "📥 Cloning the UFW-NetCatDB-Reporter repository..."
+    sudo git clone https://github.com/sefinek/UFW-NetCatDB-Reporter.git --recurse-submodules || { echo "❌ Failed to clone the repository. Exiting..."; exit 1; }
 else
-    echo "✨ The UFW-To-NetCatDB repository already exists"
+    echo "✨ The UFW-NetCatDB-Reporter repository already exists"
 fi
 
-sudo chown "$USER":"$USER" /opt/UFW-To-NetCatDB -R
+sudo chown "$USER":"$USER" /opt/UFW-NetCatDB-Reporter -R
 
 echo "📥 Pulling latest changes..."
-cd UFW-To-NetCatDB || { echo "❌ Failed to change directory to 'UFW-To-NetCatDB'. Exiting..."; exit 1; }
+cd UFW-NetCatDB-Reporter || { echo "❌ Failed to change directory to 'UFW-NetCatDB-Reporter'. Exiting..."; exit 1; }
 git pull || { echo "❌ Failed to pull the latest changes. Exiting..."; exit 1; }
 
 # Install npm dependencies
@@ -240,4 +240,4 @@ echo "⚙️ Config File   : $PWD/config.js"
 echo -e "\n====================================== Support ======================================"
 echo "📩 Email         : contact@sefinek.net"
 echo "🔵 Discord       : https://discord.gg/RVH8UXgmzs"
-echo "😺 GitHub Issues : https://github.com/sefinek/UFW-To-NetCatDB/issues"
+echo "😺 GitHub Issues : https://github.com/sefinek/UFW-NetCatDB-Reporter/issues"

@@ -5,12 +5,12 @@
 
 const fs = require('node:fs');
 const chokidar = require('chokidar');
-const isLocalIP = require('./utils/isLocalIP.js');
-const { reportedIPs, loadReportedIPs, saveReportedIPs, isIPReportedRecently, markIPAsReported } = require('./services/cache.js');
-const log = require('./utils/log.js');
-const axios = require('./services/axios.js');
-const serverAddress = require('./services/fetchServerIP.js');
-const discordWebhooks = require('./services/discord.js');
+const isLocalIP = require('./scripts/utils/isLocalIP.js');
+const { reportedIPs, loadReportedIPs, saveReportedIPs, isIPReportedRecently, markIPAsReported } = require('./scripts/services/cache.js');
+const log = require('./scripts/utils/log.js');
+const axios = require('./scripts/services/axios.js');
+const serverAddress = require('./scripts/services/fetchServerIP.js');
+const discordWebhooks = require('./scripts/services/discord.js');
 const config = require('./config.js');
 const { version } = require('./package.json');
 const { UFW_LOG_FILE, ABUSEIPDB_API_KEY, SERVER_ID, AUTO_UPDATE_ENABLED, AUTO_UPDATE_SCHEDULE, DISCORD_WEBHOOKS_ENABLED, DISCORD_WEBHOOKS_URL } = config.MAIN;
@@ -109,7 +109,7 @@ const processLogLine = async line => {
 };
 
 (async () => {
-	log(0, `v${version} (https://github.com/sefinek/UFW-To-NetCatDB)`);
+	log(0, `v${version} (https://github.com/sefinek/UFW-NetCatDB-Reporter)`);
 
 	loadReportedIPs();
 
@@ -136,10 +136,10 @@ const processLogLine = async line => {
 		});
 
 	// Auto updates
-	if (AUTO_UPDATE_ENABLED && AUTO_UPDATE_SCHEDULE) await require('./services/updates.js')();
-	if (DISCORD_WEBHOOKS_ENABLED && DISCORD_WEBHOOKS_URL) await require('./services/summaries.js')();
+	if (AUTO_UPDATE_ENABLED && AUTO_UPDATE_SCHEDULE) await require('./scripts/services/updates.js')();
+	if (DISCORD_WEBHOOKS_ENABLED && DISCORD_WEBHOOKS_URL) await require('./scripts/services/summaries.js')();
 
-	await discordWebhooks(0, `[UFW-To-NetCatDB](https://github.com/sefinek/UFW-To-NetCatDB) has been successfully launched on the device \`${SERVER_ID}\`.`);
+	await discordWebhooks(0, `[UFW-NetCatDB-Reporter](https://github.com/sefinek/UFW-NetCatDB-Reporter) has been successfully launched on the device \`${SERVER_ID}\`.`);
 
 	log(0, `Ready! Now monitoring: ${UFW_LOG_FILE}`);
 	log(0, '=====================================================================');
