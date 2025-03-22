@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 ##################################################################
-#    Copyright 2024-2025 (c) by Sefinek All rights reserved.     #
-#                    https://sefinek.net                         #
+#       Copyright 2025 (c) by Sefinek All rights reserved.       #
+#                     https://sefinek.net                        #
 ##################################################################
 
 cat << "EOF"
@@ -18,10 +18,10 @@ cat << "EOF"
                    |_|_| |_|\__\___|\__, |_|  \__,_|\__|_|\___/|_| |_|
                                     |___/
 
-                 >> Made by sefinek.net || Last update: 10.02.2025 <<
+                 >> Made by sefinek.net || Last update: 20.03.2025 <<
 
 This installer will configure UFW-NetCatDB-Reporter, a tool that analyzes UFW logs and
-reports to AbuseIPDB the IP addresses that have violated firewall rules. Join my Discord
+reports to NetCatDB the IP addresses that have violated firewall rules. Join my Discord
 server to stay updated on the latest changes and more: https://discord.gg/53DBjTuzgZ
 ============================================================================================
 
@@ -80,7 +80,7 @@ check_dependencies() {
 # Check dependencies before proceeding
 check_dependencies
 
-# Function to validate AbuseIPDB API key
+# Function to validate NetCatDB API key
 validate_token() {
     local api_key=$1
     local api_url="https://api.abuseipdb.com/api/v2/check?ipAddress=1.1.1.1"
@@ -118,9 +118,9 @@ else
     echo "✅ /var/log/ufw.log exists"
 fi
 
-# Prompt for AbuseIPDB API token
+# Prompt for NetCatDB API token
 while true; do
-    read -r -p "🔑 Please enter your AbuseIPDB API token: " api_token
+    read -r -p "🔑 Please enter your NetCatDB API token: " api_token
     if validate_token "$api_token"; then
         break
     fi
@@ -187,7 +187,7 @@ if [[ -f $config_file ]]; then
     echo "🔧 Updating $PWD/$config_file..."
     sed -i "s|UFW_LOG_FILE: .*|UFW_LOG_FILE: '$ufw_log_path',|" $config_file
     sed -i "s|SERVER_ID: .*|SERVER_ID: '$server_id',|" $config_file
-    sed -i "s|ABUSEIPDB_API_KEY: .*|ABUSEIPDB_API_KEY: '$api_token',|" $config_file
+    sed -i "s|NETCATDB_API_KEY: .*|NETCATDB_API_KEY: '$api_token',|" $config_file
 else
     echo "❌ $config_file not found. Make sure the repository was cloned and initialized correctly."
     exit 1
@@ -230,12 +230,12 @@ echo "🌌 Checking PM2 status..."
 pm2 status
 
 echo -e "\n🎉 Installation and configuration completed! Use the 'pm2 logs' command to monitor logs in real time."
+echo -e "\n⚙️ More settings can be found in the file: $PWD/config.js"
 
 echo -e "\n====================================== Summary ======================================"
 echo "🖥️ Server ID     : ${server_id:-null}"
 echo "🔑 API Key       : $api_token"
 echo "📂 Script        : $PWD"
-echo "⚙️ Config File   : $PWD/config.js"
 
 echo -e "\n====================================== Support ======================================"
 echo "📩 Email         : contact@sefinek.net"
