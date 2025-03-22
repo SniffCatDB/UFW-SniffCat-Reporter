@@ -20,10 +20,7 @@ exports.MAIN = {
 };
 
 
-/**
- * Generates a report submission to NetCatDB.
- * @returns {string} A formatted string report.
- */
+// Generates a report submission to AbuseIPDB.
 const serverId = this.MAIN.SERVER_ID && this.MAIN.SERVER_ID !== 'null' ? `on ${this.MAIN.SERVER_ID} ` : '';
 exports.REPORT_COMMENT = ({ date, srcIp, dstIp, proto, spt, dpt, In, Out, mac, len, ttl, id, tos, prec, res, window, urgp, syn }, fullLog) =>
 	`Blocked by UFW ${serverId}[${dpt}/${proto?.toLowerCase()}]
