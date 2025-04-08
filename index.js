@@ -19,7 +19,7 @@ let fileOffset = 0;
 
 const reportToAbuseIPDb = async (logData, categories, comment) => {
 	try {
-		const { data: res } = await axios.post('http://10.0.30.10:4070/api/v1/report', {
+		const { data: res } = await axios.post('https://api.netcatdb.com/api/v1/report', {
 			ip: logData.srcIp,
 			comment,
 			categories,
@@ -28,7 +28,7 @@ const reportToAbuseIPDb = async (logData, categories, comment) => {
 		log(0, `Reported ${logData.srcIp} [${logData.dpt}/${logData.proto}]; ID: ${logData.id}; Categories: ${categories}; Abuse: ${res.abuseConfidenceScore}%`);
 		return true;
 	} catch (err) {
-		log(2, `Failed to report ${logData.srcIp} [${logData.dpt}/${logData.proto}]; ID: ${logData.id}; ${err.message}\n${JSON.stringify(err.response.data?.errors || err.response.data)}`);
+		log(2, `Failed to report ${logData.srcIp} [${logData.dpt}/${logData.proto}]; ID: ${logData.id}; ${err.message}\n${JSON.stringify(err.response?.data?.errors || err.response.data)}`);
 		return false;
 	}
 };
