@@ -6,9 +6,9 @@ module.exports = {
 		// Logging configuration
 		log_date_format: 'HH:mm:ss.SSS DD.MM.YYYY',
 		merge_logs: true,
-		log_file: '~/logs/other/ufw-netcatdb/combined.log',
-		out_file: '~/logs/other/ufw-netcatdb/out.log',
-		error_file: '~/logs/other/ufw-netcatdb/error.log',
+		log_file: '/var/log/ufw-netcatdb/combined.log',
+		out_file: '/var/log/ufw-netcatdb/out.log',
+		error_file: '/var/log/ufw-netcatdb/error.log',
 
 		// Application restart policy settings
 		wait_ready: true,
