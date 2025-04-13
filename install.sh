@@ -193,10 +193,12 @@ else
     exit 1
 fi
 
-# Create logs directory
-echo "📂 Creating /var/log/ufw-abuseipdb directory..."
+# Create directories & set permissions
+echo "📂 Creating directories and setting permissions..."
 sudo mkdir -p /var/log/ufw-abuseipdb
-sudo chown "$USER":"$USER" /var/log/ufw-abuseipdb -R
+sudo chown -R "$USER":"$USER" /var/log/ufw-abuseipdb
+sudo mkdir -p /var/cache/sefinek
+sudo chown -R "$USER":"$USER" /var/cache/sefinek
 
 # Change permissions for UFW log file
 echo "🔒 Changing permissions for $ufw_log_path..."
@@ -230,7 +232,7 @@ echo "🌌 Checking PM2 status..."
 pm2 status
 
 echo -e "\n🎉 Installation and configuration completed! Use the 'pm2 logs' command to monitor logs in real time."
-echo -e "\n⚙️ More settings can be found in the file: $PWD/config.js"
+echo -e "⚙️ More settings can be found in the file: $PWD/config.js"
 
 echo -e "\n====================================== Summary ======================================"
 echo "🖥️ Server ID     : ${server_id:-null}"
