@@ -24,7 +24,7 @@ const reportIp = async (data, categories, comment) => {
 			ip: data.srcIp,
 			comment,
 			categories,
-		}, { headers: { 'Authorization': NETCATDB_API_KEY } });
+		}, { headers: { 'X-Secret-Token': NETCATDB_API_KEY } });
 
 		log(0, `Reported ${data.srcIp} [${data.dpt}/${data.proto}]; ID: ${data.id}; Categories: ${categories}; Abuse: ${res.abuseConfidenceScore}%`);
 		return true;
