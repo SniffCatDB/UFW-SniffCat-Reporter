@@ -24,7 +24,7 @@ const reportIp = async ({ srcIp, dpt = 'N/A', proto = 'N/A', id, timestamp }, ca
 
 	try {
 		const { data: res } = await axios.post('/report', {
-			ip_address: srcIp,
+			ip: srcIp,
 			categories,
 			comment,
 		}, { headers: { 'X-Secret-Token': SNIFFCAT_API_KEY } });
