@@ -231,7 +231,7 @@ if [[ -f $config_file ]]; then
     echo "🔧 Updating $PWD/$config_file..."
     sed -i "s|UFW_LOG_FILE: .*|UFW_LOG_FILE: '$ufw_log_path',|" "$config_file"
     sed -i "s|SERVER_ID: .*|SERVER_ID: $server_id,|" "$config_file"
-    sed -i "s|NETCATDB_API_KEY: .*|NETCATDB_API_KEY: '$api_token',|" "$config_file"
+    sed -i "s|SNIFFCAT_API_KEY: .*|SNIFFCAT_API_KEY: '$api_token',|" "$config_file"
 else
     echo "❌ $config_file not found. Make sure the repository was cloned and initialized correctly."
     exit 1
