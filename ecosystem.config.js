@@ -1,14 +1,14 @@
 module.exports = {
 	apps: [{
-		name: 'ufw-ncdb',
+		name: 'ufw-scdb',
 		script: './index.js',
 
 		// Logging configuration
 		log_date_format: 'HH:mm:ss.SSS DD.MM.YYYY',
 		merge_logs: true,
-		log_file: '/var/log/ufw-netcatdb/combined.log',
-		out_file: '/var/log/ufw-netcatdb/out.log',
-		error_file: '/var/log/ufw-netcatdb/error.log',
+		log_file: '/var/log/ufw-scdb/combined.log',
+		out_file: '/var/log/ufw-scdb/out.log',
+		error_file: '/var/log/ufw-scdb/error.log',
 
 		// Application restart policy settings
 		wait_ready: true,
