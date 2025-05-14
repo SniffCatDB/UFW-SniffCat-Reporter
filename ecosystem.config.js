@@ -1,14 +1,14 @@
 module.exports = {
 	apps: [{
-		name: 'ufw-scdb',
+		name: 'ufw-sniffcat',
 		script: './index.js',
 
 		// Logging configuration
 		log_date_format: 'HH:mm:ss.SSS DD.MM.YYYY',
 		merge_logs: true,
-		log_file: '/var/log/ufw-scdb/combined.log',
-		out_file: '/var/log/ufw-scdb/out.log',
-		error_file: '/var/log/ufw-scdb/error.log',
+		log_file: '/var/log/ufw-sniffcat/combined.log',
+		out_file: '/var/log/ufw-sniffcat/out.log',
+		error_file: '/var/log/ufw-sniffcat/error.log',
 
 		// Application restart policy settings
 		wait_ready: true,
