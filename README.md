@@ -1,1 +1,1 @@
-# 🛡️ UFW NetCatDB Reporter (beta)
+# 🛡️ UFW SniffCat Reporter (beta)

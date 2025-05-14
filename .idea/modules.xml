@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/UFW-To-NetCatDB.iml" filepath="$PROJECT_DIR$/.idea/UFW-To-NetCatDB.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/UFW-SniffCat-Reporter.iml" filepath="$PROJECT_DIR$/.idea/UFW-SniffCat-Reporter.iml" />
     </modules>
   </component>
 </project>
