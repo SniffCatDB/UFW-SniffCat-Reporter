@@ -27,7 +27,7 @@ const reportIp = async ({ srcIp, dpt = 'N/A', proto = 'N/A', id, timestamp }, ca
 			comment,
 		}, { headers: { 'X-Secret-Token': SNIFFCAT_API_KEY } });
 
-		logger.log(`Reported ${srcIp} [${dpt}/${proto}]; ID: ${id}; Categories: ${categories}; Abuse: ${res.data.abuseConfidenceScore}%`, 1);
+		logger.log(`Reported ${srcIp} [${dpt}/${proto}]; ID: ${id}; Categories: ${categories}; Abuse: ${res.abuseConfidenceScore}%`, 1);
 		return true;
 	} catch (err) {
 		const status = err.response?.status ?? 'unknown';
