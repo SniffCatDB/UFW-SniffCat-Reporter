@@ -1,14 +1,14 @@
 {
   "name": "ufw-netcatdb-reporter",
-  "version": "0.2.5.beta.2",
+  "version": "0.2.5-beta.3",
   "description": "A tool (with a simple installer) that monitors UFW firewall logs in real time and reports IP addresses to the NetCatDB database.",
-  "homepage": "https://github.com/sefinek/UFW-NetCatDB-Reporter#readme",
+  "homepage": "https://github.com/sefinek/UFW-SniffCat-Reporter#readme",
   "bugs": {
-    "url": "https://github.com/sefinek/UFW-NetCatDB-Reporter/issues"
+    "url": "https://github.com/sefinek/UFW-SniffCat-Reporter/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sefinek/UFW-NetCatDB-Reporter.git"
+    "url": "git+https://github.com/sefinek/UFW-SniffCat-Reporter.git"
   },
   "license": "GPL-3.0",
   "author": "Sefinek <contact@sefinek.net> (https://sefinek.net)",
@@ -25,6 +25,7 @@
     "chokidar": "^4.0.3",
     "cron": "^4.3.0",
     "ipaddr.js": "^2.2.0",
+    "semver": "^7.7.2",
     "simple-git": "^3.27.0",
     "ufw-log-parser": "^0.1.0"
   },
