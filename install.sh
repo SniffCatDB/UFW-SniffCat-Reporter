@@ -6,18 +6,6 @@
 ##################################################################
 
 cat << "EOF"
-              _      _                            ___   ____    ____    ____
-             / \    | |__    _   _   ___    ___  |_ _| |  _ \  |  _ \  | __ )
-            / _ \   | '_ \  | | | | / __|  / _ \  | |  | |_) | | | | | |  _ \
-           / ___ \  | |_) | | |_| | \__ \ |  __/  | |  |  __/  | |_| | | |_) |
-          /_/   \_\_|_.__/ _ \__,_| |___/  \___| |___| |_|     |____/  |____/
-
-                  (_)_ __ | |_ ___  __ _ _ __ __ _| |_(_) ___  _ __
-                   | | '_ \| __/ _ \/ _` | '__/ _` | __| |/ _ \| '_ \
-                   | | | | | ||  __/ (_| | | | (_| | |_| | (_) | | | |
-                   |_|_| |_|\__\___|\__, |_|  \__,_|\__|_|\___/|_| |_|
-                                    |___/
-
                  >> Made by sefinek.net || Last update: 13.04.2025 <<
 
 This installer will configure UFW-NetCatDB-Reporter, a tool that analyzes UFW logs and
@@ -202,7 +190,7 @@ cd /opt || { echo "❌ Failed to change directory to '/opt'. Exiting..."; exit 1
 
 if [ ! -d "UFW-NetCatDB-Reporter" ]; then
     echo "📥 Cloning the UFW-NetCatDB-Reporter repository..."
-    sudo git clone https://github.com/sefinek/UFW-NetCatDB-Reporter.git --recurse-submodules || { echo "❌ Failed to clone the repository. Exiting..."; exit 1; }
+    sudo git clone https://github.com/sefinek/UFW-SniffCat-Reporter.git --recurse-submodules || { echo "❌ Failed to clone the repository. Exiting..."; exit 1; }
 else
     echo "✨ The UFW-NetCatDB-Reporter repository already exists"
 fi
@@ -287,4 +275,4 @@ echo "📂 Script        : $PWD"
 echo -e "\n====================================== Support ======================================"
 echo "📩 Email         : contact@sefinek.net"
 echo "🔵 Discord       : https://discord.gg/RVH8UXgmzs"
-echo "😺 GitHub Issues : https://github.com/sefinek/UFW-NetCatDB-Reporter/issues"
+echo "😺 GitHub Issues : https://github.com/sefinek/UFW-SniffCat-Reporter/issues"
