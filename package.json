@@ -1,6 +1,6 @@
 {
   "name": "ufw-sniffcat-reporter",
-  "version": "0.2.5-beta.4",
+  "version": "0.3.0",
   "description": "A tool (with a simple installer) that monitors UFW firewall logs in real time and reports IP addresses to the SniffCat database.",
   "homepage": "https://github.com/sefinek/UFW-SniffCat-Reporter#readme",
   "bugs": {
