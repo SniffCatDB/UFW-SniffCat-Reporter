@@ -6,7 +6,7 @@
 ##################################################################
 
 cat << "EOF"
-                 >> Made by sefinek.net || Last update: 13.04.2025 <<
+                 >> Made by sefinek.net || Last update: 18.05.2025 <<
 
 This installer will configure UFW-NetCatDB-Reporter, a tool that analyzes UFW logs and
 reports to NetCatDB the IP addresses that have violated firewall rules. Join my Discord
@@ -229,8 +229,6 @@ fi
 echo "📂 Creating directories and setting permissions..."
 sudo mkdir -p /var/log/ufw-netcatdb
 sudo chown -R "$USER":"$USER" /var/log/ufw-netcatdb
-sudo mkdir -p /var/cache/sefinek
-sudo chown -R "$USER":"$USER" /var/cache/sefinek
 
 # Change permissions for UFW log file
 echo "🔒 Changing permissions for $ufw_log_path..."
