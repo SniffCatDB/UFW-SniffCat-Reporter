@@ -1,1 +1,2 @@
-# 🛡️ UFW SniffCat Reporter (beta)
+# 🛡️ UFW SniffCat Reporter
+https://sniffcat.com
