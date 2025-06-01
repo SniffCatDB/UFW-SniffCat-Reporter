@@ -8,7 +8,7 @@ const banner = require('./scripts/banners/ufw.js');
 const { axios } = require('./scripts/services/axios.js');
 const { reportedIPs, loadReportedIPs, saveReportedIPs, isIPReportedRecently, markIPAsReported } = require('./scripts/services/cache.js');
 const { refreshServerIPs, getServerIPs } = require('./scripts/services/ipFetcher.js');
-const { name, version, repoFullUrl } = require('./scripts/repo.js');
+const { name, version, repoUrl } = require('./scripts/repo.js');
 const sendWebhook = require('./scripts/services/discordWebhooks.js');
 const isSpecialPurposeIP = require('./scripts/isSpecialPurposeIP.js');
 const logger = require('./scripts/logger.js');
@@ -126,7 +126,7 @@ const processLogLine = async (line, test = false) => {
 	if (DISCORD_WEBHOOK_ENABLED && DISCORD_WEBHOOK_URL) await require('./scripts/services/summaries.js')();
 
 	// Ready
-	await sendWebhook(`[${name}](${repoFullUrl}) was successfully started!`, 0x59D267);
+	await sendWebhook(`[${name}](${repoUrl}) was successfully started!`, 0x59D267);
 	logger.log(`Ready! Now monitoring: ${UFW_LOG_FILE}`, 1);
 	process.send?.('ready');
 })();
