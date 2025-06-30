@@ -1,6 +1,6 @@
 {
   "name": "ufw-sniffcat-reporter",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "homepage": "https://sniffcat.com",
   "bugs": {
     "url": "https://github.com/sefinek/UFW-SniffCat-Reporter/issues"
@@ -20,17 +20,19 @@
     "update": "git pull --recurse-submodules && npm install --omit=dev && pm2 restart ufw-sniffcat"
   },
   "dependencies": {
-    "axios": "^1.9.0",
+    "axios": "^1.10.0",
     "axios-retry": "^4.5.0",
     "chokidar": "^4.0.3",
     "cron": "^4.3.1",
+    "csv-parse": "^5.6.0",
+    "csv-stringify": "^6.5.2",
     "ipaddr.js": "^2.2.0",
     "semver": "^7.7.2",
     "simple-git": "^3.28.0",
     "ufw-log-parser": "^0.1.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.28.0",
+    "@eslint/js": "^9.30.0",
     "globals": "^16.2.0"
   }
 }

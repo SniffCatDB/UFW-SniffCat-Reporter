@@ -6,10 +6,10 @@
 ##################################################################
 
 cat << "EOF"
-                 >> Made by sefinek.net || Last update: 18.05.2025 <<
+                 >> Made by sefinek.net || Last update: 30.06.2025 <<
 
-This installer will configure UFW-NetCatDB-Reporter, a tool that analyzes UFW logs and
-reports to NetCatDB the IP addresses that have violated firewall rules. Join my Discord
+This installer will configure UFW-SniffCat-Reporter, a tool that analyzes UFW logs and
+reports to SniffCat the IP addresses that have violated firewall rules. Join my Discord
 server to stay updated on the latest changes and more: https://discord.gg/53DBjTuzgZ
 ============================================================================================
 
@@ -86,10 +86,10 @@ check_dependencies() {
 # Check dependencies before proceeding
 check_dependencies curl node git
 
-# Function to validate NetCatDB API key
+# Function to validate SniffCat API key
 validate_token() {
     local api_key=$1
-    local api_url="https://api.abuseipdb.com/api/v2/check?ipAddress=1.1.1.1"
+    local api_url="https://api.sniffcat.com/api/v1/check?ip=1.1.1.1"
     local response
 
     if command -v curl &>/dev/null; then
@@ -151,7 +151,7 @@ fi
 
 # Prompt for API token
 while true; do
-    read -r -p "🔑 Please enter your NetCatDB API token: " api_token
+    read -r -p "🔑 Please enter your SniffCat API token: " api_token
     if validate_token "$api_token"; then
         break
     fi
@@ -188,17 +188,17 @@ fi
 
 cd /opt || { echo "❌ Failed to change directory to '/opt'. Exiting..."; exit 1; }
 
-if [ ! -d "UFW-NetCatDB-Reporter" ]; then
-    echo "📥 Cloning the UFW-NetCatDB-Reporter repository..."
+if [ ! -d "UFW-SniffCat-Reporter" ]; then
+    echo "📥 Cloning the UFW-SniffCat-Reporter repository..."
     sudo git clone https://github.com/sefinek/UFW-SniffCat-Reporter.git --recurse-submodules || { echo "❌ Failed to clone the repository. Exiting..."; exit 1; }
 else
-    echo "✨ The UFW-NetCatDB-Reporter repository already exists"
+    echo "✨ The UFW-SniffCat-Reporter repository already exists"
 fi
 
-sudo chown "$USER":"$USER" /opt/UFW-NetCatDB-Reporter -R
+sudo chown "$USER":"$USER" /opt/UFW-SniffCat-Reporter -R
 
 echo "📥 Pulling latest changes..."
-cd UFW-NetCatDB-Reporter || { echo "❌ Failed to change directory to 'UFW-NetCatDB-Reporter'. Exiting..."; exit 1; }
+cd UFW-SniffCat-Reporter || { echo "❌ Failed to change directory to 'UFW-SniffCat-Reporter'. Exiting..."; exit 1; }
 git pull || { echo "❌ Failed to pull the latest changes. Exiting..."; exit 1; }
 
 # Install npm dependencies
@@ -227,8 +227,8 @@ fi
 
 # Create directories & set permissions
 echo "📂 Creating directories and setting permissions..."
-sudo mkdir -p /var/log/ufw-netcatdb
-sudo chown -R "$USER":"$USER" /var/log/ufw-netcatdb
+sudo mkdir -p /var/log/ufw-sniffcat
+sudo chown -R "$USER":"$USER" /var/log/ufw-sniffcat
 
 # Change permissions for UFW log file
 echo "🔒 Changing permissions for $ufw_log_path..."

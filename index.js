@@ -6,31 +6,88 @@ const chokidar = require('chokidar');
 const { parseUfwLog } = require('ufw-log-parser');
 const banner = require('./scripts/banners/ufw.js');
 const { axios } = require('./scripts/services/axios.js');
+const { saveBufferToFile, loadBufferFromFile, sendBulkReport, BULK_REPORT_BUFFER } = require('./scripts/services/bulk.js');
 const { reportedIPs, loadReportedIPs, saveReportedIPs, isIPReportedRecently, markIPAsReported } = require('./scripts/services/cache.js');
 const { refreshServerIPs, getServerIPs } = require('./scripts/services/ipFetcher.js');
-const { repoSlug, repoUrl, version } = require('./scripts/repo.js');
+const { repoSlug, repoUrl } = require('./scripts/repo.js');
 const isSpecialPurposeIP = require('./scripts/isSpecialPurposeIP.js');
 const logger = require('./scripts/logger.js');
 const config = require('./config.js');
 const { UFW_LOG_FILE, SNIFFCAT_API_KEY, SERVER_ID, EXTENDED_LOGS, AUTO_UPDATE_ENABLED, AUTO_UPDATE_SCHEDULE, DISCORD_WEBHOOK_ENABLED, DISCORD_WEBHOOK_URL } = config.MAIN;
 
-let fileOffset = 0;
+const ABUSE_STATE = { isLimited: false, isBuffering: false, sentBulk: false };
+const RATE_LIMIT_LOG_INTERVAL = 10 * 60 * 1000;
+const BUFFER_STATS_INTERVAL = 5 * 60 * 1000;
+
+const nextRateLimitReset = () => {
+	const now = new Date();
+	return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 1));
+};
+
+let LAST_RATELIMIT_LOG = 0, LAST_STATS_LOG = 0, RATELIMIT_RESET = nextRateLimitReset(), fileOffset = 0;
+
+const checkRateLimit = async () => {
+	const now = Date.now();
+	if (now - LAST_STATS_LOG >= BUFFER_STATS_INTERVAL && BULK_REPORT_BUFFER.size > 0) LAST_STATS_LOG = now;
+
+	if (ABUSE_STATE.isLimited) {
+		if (now >= RATELIMIT_RESET.getTime()) {
+			ABUSE_STATE.isLimited = false;
+			ABUSE_STATE.isBuffering = false;
+			if (!ABUSE_STATE.sentBulk && BULK_REPORT_BUFFER.size > 0) await sendBulkReport();
+			RATELIMIT_RESET = nextRateLimitReset();
+			ABUSE_STATE.sentBulk = false;
+			logger.log(`Rate limit reset. Next reset scheduled at ${RATELIMIT_RESET.toISOString()}`, 1);
+		} else if (now - LAST_RATELIMIT_LOG >= RATE_LIMIT_LOG_INTERVAL) {
+			const minutesLeft = Math.ceil((RATELIMIT_RESET.getTime() - now) / 60000);
+			logger.log(`Rate limit is still active. Collected ${BULK_REPORT_BUFFER.size} IPs. Waiting for reset in ${minutesLeft} minute(s) (${RATELIMIT_RESET.toISOString()})`, 1);
+			LAST_RATELIMIT_LOG = now;
+		}
+	}
+};
 
 const reportIp = async ({ srcIp, dpt = 'N/A', proto = 'N/A', id, timestamp }, categories, comment) => {
 	if (!srcIp) return logger.log('Missing source IP (srcIp)', 3);
 
+	await checkRateLimit();
+
+	if (ABUSE_STATE.isBuffering) {
+		if (BULK_REPORT_BUFFER.has(srcIp)) return;
+		BULK_REPORT_BUFFER.set(srcIp, { categories, timestamp, comment });
+		await saveBufferToFile();
+		logger.log(`Queued ${srcIp} for bulk report (collected ${BULK_REPORT_BUFFER.size} IPs)`, 1);
+		return;
+	}
+
 	try {
-		const { data: res } = await axios.post('/report', {
+		const { data: res } = await axios.post('/report', new URLSearchParams({
 			ip: srcIp,
 			categories,
 			comment,
-		}, { headers: { 'X-Secret-Token': SNIFFCAT_API_KEY } });
+		}), { headers: { 'X-Secret-Token': SNIFFCAT_API_KEY } });
 
-		logger.log(`Reported ${srcIp} [${dpt}/${proto}]; ID: ${id}; Categories: ${categories}; Abuse: ${res.abuseConfidenceScore}%`, 1);
+		logger.log(`Reported ${srcIp} [${dpt}/${proto}]; ID: ${id}; Categories: ${categories}; Abuse: ${res.data.abuseConfidenceScore}%`, 1);
 		return true;
 	} catch (err) {
 		const status = err.response?.status ?? 'unknown';
-		logger.log(`Failed to report ${srcIp} [${dpt}/${proto}]; ${err.response?.data ? JSON.stringify(err.response.data) : err.message}`, status === 429 ? 0 : 3);
+		if (status === 429 && JSON.stringify(err.response?.data || {}).includes('Daily rate limit')) {
+			if (!ABUSE_STATE.isLimited) {
+				ABUSE_STATE.isLimited = true;
+				ABUSE_STATE.isBuffering = true;
+				ABUSE_STATE.sentBulk = false;
+				LAST_RATELIMIT_LOG = Date.now();
+				RATELIMIT_RESET = nextRateLimitReset();
+				logger.log(`Daily SniffCat limit reached. Buffering reports until ${RATELIMIT_RESET.toLocaleString()}`, 0, true);
+			}
+
+			if (!BULK_REPORT_BUFFER.has(srcIp)) {
+				BULK_REPORT_BUFFER.set(srcIp, { timestamp, categories, comment });
+				await saveBufferToFile();
+				logger.log(`Queued ${srcIp} for bulk report due to rate limit`, 1);
+			}
+		} else {
+			logger.log(`Failed to report ${srcIp} [${dpt}/${proto}]; ${err.response?.data?.errors ? JSON.stringify(err.response.data.errors) : err.message}`, status === 429 ? 0 : 3);
+		}
 	}
 };
 
@@ -83,7 +140,7 @@ const processLogLine = async (line, test = false) => {
 };
 
 (async () => {
-	banner(`UFW To SpamVerify (v${version})`);
+	banner();
 
 	// Auto updates
 	if (AUTO_UPDATE_ENABLED && AUTO_UPDATE_SCHEDULE && SERVER_ID !== 'development') {
@@ -97,6 +154,13 @@ const processLogLine = async (line, test = false) => {
 
 	// Load cache
 	await loadReportedIPs();
+
+	// Bulk
+	await loadBufferFromFile();
+	if (BULK_REPORT_BUFFER.size > 0 && !ABUSE_STATE.isLimited) {
+		logger.log(`Found ${BULK_REPORT_BUFFER.size} IPs in buffer after restart. Sending bulk report...`);
+		await sendBulkReport();
+	}
 
 	// Check UFW_LOG_FILE
 	if (!fs.existsSync(UFW_LOG_FILE)) {
