@@ -86,7 +86,7 @@ const reportIp = async ({ srcIp, dpt = 'N/A', proto = 'N/A', id, timestamp }, ca
 				logger.log(`Queued ${srcIp} for bulk report due to rate limit`, 1);
 			}
 		} else {
-			logger.log(`Failed to report ${srcIp} [${dpt}/${proto}]; ${err.response?.data?.errors ? JSON.stringify(err.response.data.errors) : err.message}`, status === 429 ? 0 : 3);
+			logger.log(`Failed to report ${srcIp} [${dpt}/${proto}]; ${err.response?.data ? JSON.stringify(err.response.data) : err.message}`, status === 429 ? 0 : 3);
 		}
 	}
 };
