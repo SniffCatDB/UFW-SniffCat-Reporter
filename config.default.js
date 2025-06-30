@@ -13,7 +13,7 @@ exports.MAIN = {
 	IPv6_SUPPORT: true, // IPv6 support: true if the device has a globally routable address assigned by the ISP.
 
 	/* --------------------------- Reports --------------------------- */
-	ABUSEIPDB_API_KEY: '', // https://sniffcat.com/api
+	SNIFFCAT_API_KEY: '', // https://sniffcat.com/api
 	IP_REPORT_COOLDOWN: 12 * 60 * 60 * 1000, // Minimum time between reports of the same IP. Must be >= 20 minutes. Do not set values like 1 hour, as it wouldn't make sense due to rate limits.
 
 	/* --------------------------- Automatic Updates --------------------------- */
