@@ -1,3 +1,5 @@
+const { FLAGS, createFlagSet } = require('./scripts/flags.js');
+
 exports.MAIN = {
 	/* --------------------------- Server --------------------------- */
 	SERVER_ID: null, // Server identifier (e.g., 'hp-terminal', 'pl-cluster', 'de1'). Use 'development' for testing only. 'production' has no effect. Use null to leave it unset.
@@ -43,13 +45,24 @@ https://github.com/sefinek/UFW-SniffCat-Reporter`; // Please don't delete this U
 
 
 // See: https://sniffcat.com/documentation/categories
-const categories = {
-	21:  '4,19,17', // FTP: Port Scan, FTP, Brute-Force
-	22:  '4,18,17', // SSH: Port Scan, SSH/SFTP, Brute-Force
-	23:  '4,23,17', // Telnet: Port Scan, Telnet, Brute-Force
-	53:  '4,1,2', // DNS: Port Scan, DNS Compromise, DNS Poisoning
-	80:  '4,11', // HTTP: Port Scan, Hacking (Web App Attack)
-	443: '4,11', // HTTPS: Port Scan, Hacking (Web App Attack)
+const CATEGORY_MAP = {
+	21: `${FLAGS.PORT_SCAN},${FLAGS.FTP}`, // FTP
+	22: `${FLAGS.PORT_SCAN},${FLAGS.SSH}`, // SSH
+	23: `${FLAGS.PORT_SCAN},${FLAGS.TELNET}`, // Telnet
+	25: `${FLAGS.PORT_SCAN},${FLAGS.EMAIL}`, // SMTP
+	80: `${FLAGS.PORT_SCAN},${FLAGS.HTTP}`, // HTTP
+	8080: `${FLAGS.PORT_SCAN},${FLAGS.HTTP}`, // HTTP
+	443: `${FLAGS.PORT_SCAN},${FLAGS.HTTP}`, // HTTPS
+	110: `${FLAGS.PORT_SCAN},${FLAGS.EMAIL}`, // POP3
+	143: `${FLAGS.PORT_SCAN},${FLAGS.EMAIL}`, // IMAP
+	445: `${FLAGS.PORT_SCAN},${FLAGS.SMB}`, // SMB
+	27017: `${FLAGS.PORT_SCAN},${FLAGS.MONGODB}`, // MongoDB
+	6379: `${FLAGS.PORT_SCAN},${FLAGS.REDIS}`, // Redis
+	3389: `${FLAGS.PORT_SCAN},${FLAGS.RDP}`, // RDP
 };
 
-exports.DETERMINE_CATEGORIES = ({ dpt }) => categories[dpt] || '4'; // Default: Port Scan
+exports.DETERMINE_CATEGORIES = ({ dpt }) => {
+	const set = createFlagSet();
+	(set.add(...(CATEGORY_MAP[dpt] || [FLAGS.PORT_SCAN])));
+	return set.toString();
+};
