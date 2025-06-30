@@ -93,9 +93,9 @@ validate_token() {
     local response
 
     if command -v curl &>/dev/null; then
-        response=$(curl -s -o /dev/null -w "%{http_code}" -H "Key: $api_key" "$api_url")
+        response=$(curl -s -o /dev/null -w "%{http_code}" -H "X-Secret-Token: $api_key" "$api_url")
     elif command -v wget &>/dev/null; then
-        response=$(wget --quiet --server-response --header="Key: $api_key" --output-document=/dev/null "$api_url" 2>&1 | awk '/HTTP\/1\.[01] [0-9]{3}/ {print $2}' | tail -n1)
+        response=$(wget --quiet --server-response --header="X-Secret-Token: $api_key" --output-document=/dev/null "$api_url" 2>&1 | awk '/HTTP\/1\.[01] [0-9]{3}/ {print $2}' | tail -n1)
     else
         echo "🚨 Neither curl nor wget is installed. Please install one of them to proceed."
         exit 1
