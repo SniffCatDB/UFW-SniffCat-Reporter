@@ -1,4 +1,5 @@
 const { FLAGS, createFlagSet } = require('./scripts/flags.js');
+const { createFlagCollection } = require('./scripts/flags');
 
 exports.MAIN = {
 	/* --------------------------- Server --------------------------- */
@@ -45,24 +46,24 @@ https://github.com/sefinek/UFW-SniffCat-Reporter`; // Please don't delete this U
 
 
 // See: https://sniffcat.com/documentation/categories
-const CATEGORY_MAP = {
-	21: `${FLAGS.PORT_SCAN},${FLAGS.FTP}`, // FTP
-	22: `${FLAGS.PORT_SCAN},${FLAGS.SSH}`, // SSH
-	23: `${FLAGS.PORT_SCAN},${FLAGS.TELNET}`, // Telnet
-	25: `${FLAGS.PORT_SCAN},${FLAGS.EMAIL}`, // SMTP
-	80: `${FLAGS.PORT_SCAN},${FLAGS.HTTP}`, // HTTP
-	8080: `${FLAGS.PORT_SCAN},${FLAGS.HTTP}`, // HTTP
-	443: `${FLAGS.PORT_SCAN},${FLAGS.HTTP}`, // HTTPS
-	110: `${FLAGS.PORT_SCAN},${FLAGS.EMAIL}`, // POP3
-	143: `${FLAGS.PORT_SCAN},${FLAGS.EMAIL}`, // IMAP
-	445: `${FLAGS.PORT_SCAN},${FLAGS.SMB}`, // SMB
-	27017: `${FLAGS.PORT_SCAN},${FLAGS.MONGODB}`, // MongoDB
-	6379: `${FLAGS.PORT_SCAN},${FLAGS.REDIS}`, // Redis
-	3389: `${FLAGS.PORT_SCAN},${FLAGS.RDP}`, // RDP
+const CATEGORIES = {
+	21: [FLAGS.PORT_SCAN, FLAGS.FTP],
+	22: [FLAGS.PORT_SCAN, FLAGS.SSH],
+	23: [FLAGS.PORT_SCAN, FLAGS.TELNET],
+	25: [FLAGS.PORT_SCAN, FLAGS.EMAIL],
+	80: [FLAGS.PORT_SCAN, FLAGS.HTTP],
+	8080: [FLAGS.PORT_SCAN, FLAGS.HTTP],
+	443: [FLAGS.PORT_SCAN, FLAGS.HTTP],
+	110: [FLAGS.PORT_SCAN, FLAGS.EMAIL],
+	143: [FLAGS.PORT_SCAN, FLAGS.EMAIL],
+	445: [FLAGS.PORT_SCAN, FLAGS.SMB],
+	27017: [FLAGS.PORT_SCAN, FLAGS.MONGODB],
+	6379: [FLAGS.PORT_SCAN, FLAGS.REDIS],
+	3389: [FLAGS.PORT_SCAN, FLAGS.RDP],
 };
 
 exports.DETERMINE_CATEGORIES = ({ dpt }) => {
-	const set = createFlagSet();
-	(set.add(...(CATEGORY_MAP[dpt] || [FLAGS.PORT_SCAN])));
+	const set = createFlagCollection();
+	set.add(...(CATEGORIES[dpt] || [FLAGS.PORT_SCAN]));
 	return set.toString();
 };
