@@ -1,5 +1,4 @@
-const { FLAGS, createFlagSet } = require('./scripts/flags.js');
-const { createFlagCollection } = require('./scripts/flags');
+const { FLAGS, createFlagCollection } = require('./scripts/flags.js');
 
 exports.MAIN = {
 	/* --------------------------- Server --------------------------- */
