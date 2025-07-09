@@ -2,6 +2,7 @@
   <dictionary name="project">
     <words>
       <w>abuseipdb</w>
+      <w>ratelimit</w>
       <w>sniffcat</w>
       <w>spamverify</w>
     </words>
