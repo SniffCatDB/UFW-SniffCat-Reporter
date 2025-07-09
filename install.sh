@@ -190,7 +190,7 @@ cd /opt || { echo "❌ Failed to change directory to '/opt'. Exiting..."; exit 1
 
 if [ ! -d "UFW-SniffCat-Reporter" ]; then
     echo "📥 Cloning the UFW-SniffCat-Reporter repository..."
-    sudo git clone https://github.com/sefinek/UFW-SniffCat-Reporter.git --recurse-submodules || { echo "❌ Failed to clone the repository. Exiting..."; exit 1; }
+    sudo git clone https://github.com/SniffCatDB/UFW-SniffCat-Reporter.git --recurse-submodules || { echo "❌ Failed to clone the repository. Exiting..."; exit 1; }
 else
     echo "✨ The UFW-SniffCat-Reporter repository already exists"
 fi
@@ -273,4 +273,4 @@ echo "📂 Script        : $PWD"
 echo -e "\n====================================== Support ======================================"
 echo "📩 Email         : contact@sefinek.net"
 echo "🔵 Discord       : https://discord.gg/RVH8UXgmzs"
-echo "😺 GitHub Issues : https://github.com/sefinek/UFW-SniffCat-Reporter/issues"
+echo "😺 GitHub Issues : https://github.com/SniffCatDB/UFW-SniffCat-Reporter/issues"

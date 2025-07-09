@@ -6,7 +6,7 @@ To prevent excessive reporting of the same IP address within a short time period
 Also, check this out: [sefinek/Cloudflare-WAF-To-SniffCat](https://github.com/sefinek/Cloudflare-WAF-To-SniffCat)
 
 > [!IMPORTANT]
-> - If you'd like to make changes to any files in this repository, please start by creating a [public fork](https://github.com/sefinek/UFW-SniffCat-Reporter/fork).
+> - If you'd like to make changes to any files in this repository, please start by creating a [public fork](https://github.com/SniffCatDB/UFW-SniffCat-Reporter/fork).
 > - UDP traffic should not be reported!
 
 

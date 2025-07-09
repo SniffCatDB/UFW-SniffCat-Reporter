@@ -3,11 +3,11 @@
   "version": "0.4.1",
   "homepage": "https://sniffcat.com",
   "bugs": {
-    "url": "https://github.com/sefinek/UFW-SniffCat-Reporter/issues"
+    "url": "https://github.com/SniffCatDB/UFW-SniffCat-Reporter/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sefinek/UFW-SniffCat-Reporter.git"
+    "url": "git+https://github.com/SniffCatDB/UFW-SniffCat-Reporter.git"
   },
   "license": "GPL-3.0",
   "author": "Sefinek <contact@sefinek.net> (https://sefinek.net)",
