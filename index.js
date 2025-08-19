@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const chokidar = require('chokidar');
 const { parseUfwLog } = require('ufw-log-parser');
 const banner = require('./scripts/banners/ufw.js');
-const { axios } = require('./scripts/services/axios.js');
+const { axiosService } = require('./scripts/services/axios.js');
 const { saveBufferToFile, loadBufferFromFile, sendBulkReport, BULK_REPORT_BUFFER } = require('./scripts/services/bulk.js');
 const { reportedIPs, loadReportedIPs, saveReportedIPs, isIPReportedRecently, markIPAsReported } = require('./scripts/services/cache.js');
 const { refreshServerIPs, getServerIPs } = require('./scripts/services/ipFetcher.js');
@@ -13,7 +13,7 @@ const { repoSlug, repoUrl } = require('./scripts/repo.js');
 const isSpecialPurposeIP = require('./scripts/isSpecialPurposeIP.js');
 const logger = require('./scripts/logger.js');
 const config = require('./config.js');
-const { UFW_LOG_FILE, SNIFFCAT_API_KEY, SERVER_ID, EXTENDED_LOGS, AUTO_UPDATE_ENABLED, AUTO_UPDATE_SCHEDULE, DISCORD_WEBHOOK_ENABLED, DISCORD_WEBHOOK_URL } = config.MAIN;
+const { UFW_LOG_FILE, SERVER_ID, EXTENDED_LOGS, AUTO_UPDATE_ENABLED, AUTO_UPDATE_SCHEDULE, DISCORD_WEBHOOK_ENABLED, DISCORD_WEBHOOK_URL } = config.MAIN;
 
 const ABUSE_STATE = { isLimited: false, isBuffering: false, sentBulk: false };
 const RATE_LIMIT_LOG_INTERVAL = 10 * 60 * 1000;
@@ -46,7 +46,7 @@ const checkRateLimit = async () => {
 	}
 };
 
-const reportIp = async ({ srcIp, dpt = 'N/A', proto = 'N/A', id, timestamp }, categories, comment) => {
+const reportIp = async ({ srcIp, dpt = 'N/A', proto = 'N/A', timestamp, timestampRaw }, categories, comment) => {
 	if (!srcIp) return logger.log('Missing source IP (srcIp)', 3);
 
 	await checkRateLimit();
@@ -60,13 +60,14 @@ const reportIp = async ({ srcIp, dpt = 'N/A', proto = 'N/A', id, timestamp }, ca
 	}
 
 	try {
-		const { data: res } = await axios.post('/report', new URLSearchParams({
+		const { data: res } = await axiosService.post('/report', {
 			ip: srcIp,
 			categories,
 			comment,
-		}), { headers: { 'X-Secret-Token': SNIFFCAT_API_KEY } });
+			timestamp,
+		});
 
-		logger.log(`Reported ${srcIp} [${dpt}/${proto}]; ID: ${id}; Categories: ${categories}; Abuse: ${res.abuseConfidenceScore}%`, 1);
+		logger.log(`Reported ${srcIp} [${dpt}/${proto}]; Categories: ${categories}; Abuse: ${res.data.threat_score}%; Raw timestamp: ${timestampRaw}; Parsed: ${timestamp}`, 1);
 		return true;
 	} catch (err) {
 		const status = err.response?.status ?? 'unknown';
@@ -86,7 +87,7 @@ const reportIp = async ({ srcIp, dpt = 'N/A', proto = 'N/A', id, timestamp }, ca
 				logger.log(`Queued ${srcIp} for bulk report due to rate limit`, 1);
 			}
 		} else {
-			logger.log(`Failed to report ${srcIp} [${dpt}/${proto}]; ${err.response?.data ? JSON.stringify(err.response.data) : err.message}`, status === 429 ? 0 : 3);
+			logger.log(`Failed to report ${srcIp} [${dpt}/${proto}]; ${err.response?.data?.message ? err.response.data.message : err.message}`, status === 429 ? 0 : 3);
 		}
 	}
 };
