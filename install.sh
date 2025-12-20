@@ -226,8 +226,8 @@ mkdir -p /opt
 cd /opt || { echo "❌ Failed to change directory to '/opt'. Exiting..."; exit 1; }
 
 # Migrate from old directory name if exists
-if [ -d "UFW-SniffCat-Reporter" ] && [ ! -d "ufw-sniffcat-reporter" ]; then
-    echo "📦 Migrating from old directory name (UFW-SniffCat-Reporter → ufw-sniffcat-reporter)..."
+if [ -d "UFW-SniffCat-Reporter" ] && [ ! -d "ufw-sniffcat" ]; then
+    echo "📦 Migrating from old directory name (UFW-SniffCat-Reporter → ufw-sniffcat)..."
 
     # Stop UFW-SniffCat reporter process if running
     if command -v pm2 &>/dev/null; then
@@ -238,21 +238,21 @@ if [ -d "UFW-SniffCat-Reporter" ] && [ ! -d "ufw-sniffcat-reporter" ]; then
         fi
     fi
 
-    sudo mv UFW-SniffCat-Reporter ufw-sniffcat-reporter
+    sudo mv UFW-SniffCat-Reporter ufw-sniffcat
     echo "✅ Migration completed"
 fi
 
-if [ ! -d "ufw-sniffcat-reporter" ]; then
+if [ ! -d "ufw-sniffcat" ]; then
     echo "📥 Cloning the repository..."
-    sudo git clone --recurse-submodules https://github.com/sefinek/UFW-SniffCat-Reporter.git ufw-sniffcat-reporter || { echo "❌ Failed to clone the repository. Exiting..."; exit 1; }
+    sudo git clone --recurse-submodules https://github.com/sefinek/UFW-SniffCat-Reporter.git ufw-sniffcat || { echo "❌ Failed to clone the repository. Exiting..."; exit 1; }
 else
     echo "✅ The repository already exists"
 fi
 
-sudo chown "$USER":"$USER" /opt/ufw-sniffcat-reporter -R
+sudo chown "$USER":"$USER" /opt/ufw-sniffcat -R
 
 echo "📥 Pulling latest changes..."
-cd ufw-sniffcat-reporter || { echo "❌ Failed to change directory to 'ufw-sniffcat-reporter'. Exiting..."; exit 1; }
+cd ufw-sniffcat || { echo "❌ Failed to change directory to 'ufw-sniffcat'. Exiting..."; exit 1; }
 git pull || { echo "❌ Failed to pull the latest changes. Exiting..."; exit 1; }
 
 # Install npm dependencies
