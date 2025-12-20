@@ -66,7 +66,7 @@ cd UFW-SniffCat-Reporter
 npm install
 cp config.default.js config.js
 sudo chmod 644 /var/log/ufw.log
-npm install -g pm2
+npm install -g pm2@latest
 sudo mkdir -p /var/log/ufw-sniffcat
 sudo chown -R "$USER":"$USER" /var/log/ufw-sniffcat
 pm2 start
