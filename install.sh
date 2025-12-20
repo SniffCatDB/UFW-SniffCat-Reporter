@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-##################################################################
-#    Copyright 2024-2025 (c) by Sefinek All rights reserved.     #
-#                    https://sefinek.net                         #
-##################################################################
+#############################################################
+#    Copyright 2025 (c) by Sefinek All rights reserved.     #
+#                   https://sefinek.net                     #
+#############################################################
 
 cat << "EOF"
 This installer will configure UFW-SniffCat-Reporter, a tool that analyzes UFW logs and
