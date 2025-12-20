@@ -65,7 +65,8 @@ git clone --recurse-submodules https://github.com/SniffCatDB/UFW-SniffCat-Report
 cd UFW-SniffCat-Reporter
 npm install
 cp config.default.js config.js
-sudo chmod 644 /var/log/ufw.log
+sudo chown syslog:"$USER" "$ufw_log_path"
+sudo chmod 640 "$ufw_log_path"
 npm install -g pm2@latest
 sudo mkdir -p /var/log/ufw-sniffcat
 sudo chown -R "$USER":"$USER" /var/log/ufw-sniffcat
