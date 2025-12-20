@@ -61,9 +61,9 @@ sudo apt update && sudo apt install -y git
 ```bash
 sudo apt update && sudo apt upgrade
 cd ~
-git clone --recurse-submodules https://github.com/SniffCatDB/UFW-SniffCat-Reporter.git
-cd UFW-SniffCat-Reporter
-npm install
+git clone --recurse-submodules https://github.com/SniffCatDB/UFW-SniffCat-Reporter.git ufw-sniffcat-reporter
+cd ufw-sniffcat-Reporter
+npm install --omit=dev
 cp config.default.js config.js
 sudo chown syslog:"$USER" "$ufw_log_path"
 sudo chmod 640 "$ufw_log_path"
