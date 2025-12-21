@@ -74,5 +74,5 @@ const CATEGORIES = {
 exports.DETERMINE_CATEGORIES = ({ dpt }) => {
 	const set = createFlagCollection();
 	set.add(...(CATEGORIES[dpt] || [FLAGS.PORT_SCAN]));
-	return set.toString();
+	return set.toString('SniffCat');
 };
