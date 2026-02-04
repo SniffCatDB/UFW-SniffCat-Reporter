@@ -1,5 +1,5 @@
-//   Copyright 2025 © by Sefinek. All Rights Reserved.
-//                 https://sefinek.net
+//   Copyright 2025-2026 © by Sefinek. All Rights Reserved.
+//                    https://sefinek.net
 
 const fs = require('node:fs');
 const chokidar = require('chokidar');
@@ -8,14 +8,13 @@ const banner = require('./scripts/banners/ufw.js');
 const { axiosService } = require('./scripts/services/axios.js');
 const { saveBufferToFile, loadBufferFromFile, sendBulkReport, BULK_REPORT_BUFFER } = require('./scripts/services/bulk.js');
 const { reportedIPs, loadReportedIPs, saveReportedIPs, isIPReportedRecently, markIPAsReported } = require('./scripts/services/cache.js');
+const ABUSE_STATE = require('./scripts/services/state.js');
 const { refreshServerIPs, getServerIPs } = require('./scripts/services/ipFetcher.js');
 const { repoSlug, repoUrl } = require('./scripts/repo.js');
 const isSpecialPurposeIP = require('./scripts/isSpecialPurposeIP.js');
 const logger = require('./scripts/logger.js');
 const config = require('./config.js');
 const { UFW_LOG_FILE, SERVER_ID, EXTENDED_LOGS, AUTO_UPDATE_ENABLED, AUTO_UPDATE_SCHEDULE, DISCORD_WEBHOOK_ENABLED, DISCORD_WEBHOOK_URL } = config.MAIN;
-
-const ABUSE_STATE = { isLimited: false, isBuffering: false, sentBulk: false };
 const RATE_LIMIT_LOG_INTERVAL = 10 * 60 * 1000;
 const BUFFER_STATS_INTERVAL = 5 * 60 * 1000;
 
@@ -153,7 +152,7 @@ const processLogLine = async (line, test = false) => {
 
 	// Auto updates
 	if (AUTO_UPDATE_ENABLED && AUTO_UPDATE_SCHEDULE && SERVER_ID !== 'development') {
-		await require('./scripts/services/updates.js');
+		await require('./scripts/services/updates.js')();
 	} else {
 		await require('./scripts/services/version.js');
 	}
@@ -178,19 +177,48 @@ const processLogLine = async (line, test = false) => {
 	}
 
 	// Watch
+	let incompleteLine = '';
+	let processing = Promise.resolve();
+
 	fileOffset = fs.statSync(UFW_LOG_FILE).size;
 	chokidar.watch(UFW_LOG_FILE, { persistent: true, ignoreInitial: true })
-		.on('change', path => {
-			const stats = fs.statSync(path);
+		.on('change', filePath => {
+			const stats = fs.statSync(filePath);
 			if (stats.size < fileOffset) {
+				incompleteLine = '';
 				fileOffset = 0;
 				logger.info('The file has been truncated, and the offset has been reset');
 			}
 
-			fs.createReadStream(path, { start: fileOffset, encoding: 'utf8' }).on('data', chunk => {
-				chunk.split('\n').filter(line => line.trim()).forEach(processLogLine);
-			}).on('end', () => {
-				fileOffset = stats.size;
+			const start = fileOffset;
+			fileOffset = stats.size;
+
+			processing = processing.then(async () => {
+				let data = '';
+				try {
+					await new Promise((resolve, reject) => {
+						fs.createReadStream(filePath, { start, encoding: 'utf8' })
+							.on('data', chunk => { data += chunk; })
+							.on('end', resolve)
+							.on('error', reject);
+					});
+				} catch (err) {
+					logger.error(`Failed to read log chunk: ${err.message}`);
+					return;
+				}
+
+				const text = incompleteLine + data;
+				const lines = text.split('\n');
+				incompleteLine = lines.pop();
+
+				for (const line of lines) {
+					if (!line.trim()) continue;
+					try {
+						await processLogLine(line);
+					} catch (err) {
+						logger.error(`Failed to process log line: ${err.message}`);
+					}
+				}
 			});
 		});
 
@@ -202,5 +230,19 @@ const processLogLine = async (line, test = false) => {
 	logger.success(`Ready! Now monitoring: ${UFW_LOG_FILE}`);
 	process.send?.('ready');
 })();
+
+const gracefulShutdown = async signal => {
+	logger.info(`Received ${signal}, flushing pending writes...`);
+	try {
+		await saveBufferToFile();
+		await saveReportedIPs();
+	} catch (err) {
+		logger.error(`Error during shutdown flush: ${err.message}`);
+	}
+	process.exit(0);
+};
+
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 
 module.exports = processLogLine;
