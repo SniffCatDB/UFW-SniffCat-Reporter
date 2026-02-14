@@ -1,9 +1,9 @@
 # 🛡️ UFW SniffCat Reporter
-[![Version](https://img.shields.io/github/package-json/v/sefinek/UFW-SniffCat-Reporter?label=version)](https://github.com/sefinek/UFW-SniffCat-Reporter)
-[![License: GPL v3](https://img.shields.io/github/license/sefinek/UFW-SniffCat-Reporter)](https://www.gnu.org/licenses/gpl-3.0)
+[![Version](https://img.shields.io/github/package-json/v/SniffCatDB/UFW-SniffCat-Reporter?label=version)](https://github.com/SniffCatDB/UFW-SniffCat-Reporter)
+[![License: GPL v3](https://img.shields.io/github/license/SniffCatDB/UFW-SniffCat-Reporter)](https://www.gnu.org/licenses/gpl-3.0)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D20.0.0-339933?logo=node.js&logoColor=white)](https://nodejs.org)
-[![Last Commit](https://img.shields.io/github/last-commit/sefinek/UFW-SniffCat-Reporter?label=last%20commit)](https://github.com/sefinek/UFW-SniffCat-Reporter/commits)
-[![Stars](https://img.shields.io/github/stars/sefinek/UFW-SniffCat-Reporter)](https://github.com/sefinek/UFW-SniffCat-Reporter/stargazers)
+[![Last Commit](https://img.shields.io/github/last-commit/SniffCatDB/UFW-SniffCat-Reporter?label=last%20commit)](https://github.com/SniffCatDB/UFW-SniffCat-Reporter/commits)
+[![Stars](https://img.shields.io/github/stars/SniffCatDB/UFW-SniffCat-Reporter)](https://github.com/SniffCatDB/UFW-SniffCat-Reporter/stargazers)
 
 An integration tool designed to analyze UFW logs and report IP addresses blocked by the firewall to the [SniffCat](https://sniffcat.com) database.  
 To prevent excessive reporting of the same IP address within a short time period, the tool uses a temporary cache file to track previously reported IP addresses.
