@@ -1,6 +1,6 @@
 {
   "name": "ufw-sniffcat-reporter",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "homepage": "https://sniffcat.com",
   "bugs": {
     "url": "https://github.com/SniffCatDB/UFW-SniffCat-Reporter/issues"
