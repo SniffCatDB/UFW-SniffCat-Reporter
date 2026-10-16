@@ -41,7 +41,7 @@ https://github.com/SniffCatDB/UFW-SniffCat-Reporter`; // Please don't delete thi
 
 
 // See: https://sniffcat.com/documentation/categories
-const { FLAGS, createFlagCollection } = require('./scripts/flags.js');
+const { FLAGS, createFlagCollection } = require('./scripts/reporting/flags.js');
 const CATEGORIES = {
 	21:   [FLAGS.PORT_SCAN, FLAGS.FTP],
 	22:   [FLAGS.PORT_SCAN, FLAGS.SSH],
